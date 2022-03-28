@@ -1,0 +1,45 @@
+* {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    /* overflow: hidden; */
+}
+
+div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: 'Poppin', sans-serif;
+    width: 100%;
+    height: 100vh;
+}
+
+h2 {
+    font-size: 60px;
+    background-color: #eee;
+    padding: 8px 24px;
+    border-radius: 16px;
+}
+
+div:nth-child(1) {
+    /* Select the first Division with given Styling */
+    background-image: url(../img/div1.png);
+    background-size: cover;
+}
+
+div:nth-child(2) {
+    background: maroon;
+}
+
+div:nth-child(3) {
+    height: 400px;
+    background-image: url(../img/div3.png);
+    background-attachment: fixed;
+    /*the Parallax Effect*/
+    background-size: cover;
+}
+
+div:nth-child(4) {
+    background-color: aquamarine;
+}
