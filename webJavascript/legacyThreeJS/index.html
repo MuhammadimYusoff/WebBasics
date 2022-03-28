@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"
+        integrity="sha512-NLtnLBS9Q2w7GKK9rKxdtgL7rA7CAS85uC/0xd9im4J/yOL4F9ZVlv634NAM7run8hz3wI2GabaA6vv8vJtHiQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+        integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js"
+        integrity="sha512-tjnAmVGiveGgWkDgt8h8oqmOl3cnmQkTNUIFK2BjMz0SliBCm9l0ecN1fHiOG2mATHSYm/miXNX6tE0/5uYKMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <link rel="stylesheet" href="css/style.css">
+    <title>THREE JS Legacy Tutorial</title>
+</head>
+
+<body>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Auto reSize the viewport and the Content/Object.
+        window.addEventListener('resize', function () {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize(width, height)
+            camera.aspect = width / height;
+            camera.updateprojectionMatrix();
+        });
+
+        //! 1)  Create Geometry
+        var geometry = new THREE.BoxGeometry(1, 1, 1); // Tinggi x Lebar x Panjang
+        
+        //! 2) Create Material color or image
+        var material = new THREE.MeshBasicMaterial({
+            color: 0xffffff, // white color
+            wireframe: true
+        });
+
+        //! 3) Create Mesh
+        var cube = new THREE.Mesh(geometry, material);
+
+        // Create a Cylinder
+        var cylinderGeometry = new THREE.CylinderGeometry(1, 1, 5, 5);
+        var cylinderMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            wireframe: true
+        });
+        var cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+        
+        // Project it to the Scene
+        scene.add( cylinder, cube);
+
+        // Set Camera Posiiton
+        camera.position.z = 10;
+
+        // Game Logic
+        var update = function () {
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.05;
+            cube.rotation.z += 0.01;
+            cylinder.rotation.x += 0.02;
+            cylinder.rotation.y += 0.03;
+            cylinder.rotation.z += 0.03;
+        };
+
+        // Draw Scene
+        render = function () {
+            renderer.render(scene, camera);
+        };
+
+        // Run GameLoop (update, render, repeat)
+        var GameLoop = function () {
+            requestAnimationFrame(GameLoop);
+
+            update();
+            render();
+        };
+
+        GameLoop();
+    </script>
+</body>
+
+</html>

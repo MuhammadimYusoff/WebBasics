@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js" integrity="sha512-NLtnLBS9Q2w7GKK9rKxdtgL7rA7CAS85uC/0xd9im4J/yOL4F9ZVlv634NAM7run8hz3wI2GabaA6vv8vJtHiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Thanos Portal THREE JS</title>
+</head>
+<body>
+    <!-- <img src="images/logo.png" alt="logo image" width="100px"> -->
+
+    <script>
+        var scene, sceneLight, portalLight, camera, renderer, clock, portalParticles = [], smokeParticle = [];
+
+        // Create the Scene, Camera and Renderer
+        function initScene() {
+
+            // Create Scene and Light
+            scene = new THREE.Scene();
+            sceneLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            sceneLight.position.set(0,0,1);
+            scene.add(sceneLight);
+
+            // Portal Light
+            portalLight = new THREE.PointLight(0x062d89, 30, 350, 1.7);
+            portalLight.position.set(0, 0, 250);
+            scene.add(portalLight);
+
+            // Create Camera
+            camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 10000);
+            camera.position.z = 1000;
+            scene.add(camera);
+
+            // Create Renderer
+            renderer = new THREE.WebGLRenderer();
+            renderer.setClearColor(0x000000, 1);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Auto resize viewport
+            window.addEventListener('resize', function() {
+                var width = window.innerWidth, height = window.innerHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+
+            // renderer.render(scene, camera); // Test initial scene render
+            particleSetup();
+        }
+
+        // Create the Object with Geometry, Material and Mesh
+        function particleSetup() {
+            let loader = new THREE.TextureLoader();
+
+            loader.load("images/smoke.png", function (texture){
+                // Create Geometry
+                portalGeo = new THREE.PlaneBufferGeometry(350, 350);
+
+                // Create Material
+                portalMaterial = new THREE.MeshStandardMaterial({
+                    map:texture, 
+                    transparent: true
+                });
+                // Create smokeGeometry
+                smokeGeo = new THREE.PlaneBufferGeometry(1000, 1000);
+
+                // Create smokeMaterial
+                smokeMaterial = new THREE.MeshStandardMaterial({
+                    map:texture, 
+                    transparent: true
+                });
+                
+                // Loop to create the Portal texture
+                for (let p = 880; p > 250; p--) {
+                    // Create Mesh
+                    let particle = new THREE.Mesh(portalGeo, portalMaterial)
+
+                    // Object Position
+                    particle.position.set(
+                        0.5 * p * Math.cos((4 * p * Math.PI) / 180),
+                        0.5 * p * Math.sin((4 * p * Math.PI) / 180),
+                        0.1 * p
+                    );
+                    particle.rotation.z = Math.random() * 360;
+                    portalParticles.push(particle);
+                    scene.add(particle);
+                }
+
+                // Loop to create the Smoke texture
+                for (let p = 0; p < 40; p++) {
+                    // Create Mesh
+                    let particle = new THREE.Mesh(smokeGeo, smokeMaterial)
+
+                    // Object Position
+                    particle.position.set(
+                        Math.random() * 1000 - 500,
+                        Math.random() * 400 - 200,
+                        25
+                    );
+                    particle.rotation.z = Math.random() * 360;
+                    particle.material.opacity = 0.4; // 40% Opacity
+                    portalParticles.push(particle);
+                    scene.add(particle);
+                }
+
+                // Clock Object to keep track of the time
+                clock = new THREE.Clock();
+                
+                // To animate the Scene recursively
+                animate();
+            });
+        }
+
+        function animate() {
+            let delta = clock.getDelta(); // Control the Object Movement
+            portalParticles.forEach(p => {
+                p.rotation.z -= delta * 1.5;
+            });
+            smokeParticle.forEach(p => {
+                p.rotation.z -= delta * 0.2;
+            });
+            if (Math.random() > 0.9) {
+                portalLight.power = 350 + Math.random() * 500;
+            }
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate)
+        }
+        initScene();
+    </script>
+</body>
+</html>
