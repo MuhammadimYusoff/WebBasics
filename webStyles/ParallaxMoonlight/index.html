@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Parallax Moonlight Effect | Vanilla Javascript</title>
+</head>
+<body>
+    <section>
+        <img src="img/bg.jpg" id="bg" alt="background picture">
+        <img src="img/moon.png" id="moon" alt="moon picture">
+        <img src="img/mountain.png" id="mountain" alt="mountain picture">
+        <img src="img/road.png" id="road" alt="road picture">
+        <h2 id="text"> RAMADAN KAREEM <br> HERE AGAIN </h2>
+    </section>
+    <script>
+        let bg = document.getElementById('bg');
+        let moon = document.getElementById('moon');
+        let mountain = document.getElementById('mountain');
+        let road = document.getElementById('road');
+        let text = document.getElementById('text');
+
+        window.addEventListener('scroll', function() {
+            var value = window.scrollY;
+
+            bg.style.top = value * 0.5 + 'px'; // push bg to top
+            moon.style.left = -value * 0.5 + 'px'; // Push moon to left
+            mountain.style.top = -value * 0.15 + 'px'; // push mountain to top
+            road.style.top = value * 0.15 + 'px'; // push road to top
+            text.style.top = value * 1 + 'px'; // push text to top but slow (because 1)
+        })
+
+    </script>
+</body>
+</html>
